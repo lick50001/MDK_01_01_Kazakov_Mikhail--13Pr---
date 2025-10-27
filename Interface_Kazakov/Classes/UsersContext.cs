@@ -11,11 +11,11 @@ namespace Interface_Kazakov.Classes
 {
     public class UsersContext:IUsers
     {
-        private readonly List<Users> _allUsers;
+        public readonly List<Users> AllUsers;
 
         public UsersContext()
         {
-            _allUsers = new List<Users>
+            AllUsers = new List<Users>
             {
                 new Users(1, "Аликина Ольга"),
                 new Users(2, "Бояркин Данил"),
@@ -41,7 +41,7 @@ namespace Interface_Kazakov.Classes
 
         public void All(out List<Users> users)
         {
-            users = new List<Users>(_allUsers);
+            users = new List<Users>(AllUsers);
         }
     }
 }

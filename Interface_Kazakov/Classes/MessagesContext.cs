@@ -7,14 +7,14 @@ using Interface_Kazakov.Models;
 namespace Interface_Kazakov.Classes
 {
     // Класс НЕ наследует Messages — он работает с ними
-    public class MessagesContext : IMessages
+    public class MessagesContext 
     {
-        // Статическое поле — инициализируем сразу, чтобы избежать null
         public static List<Messages> AllMessages { get; } = new List<Messages>();
 
         public string MessageText { get; set; }
         public DateTime Create { get; set; }
         public int IdUser { get; set; }
+        public string Message { get; internal set; }
 
         public MessagesContext() { }
 
@@ -30,33 +30,22 @@ namespace Interface_Kazakov.Classes
             messages = new List<Messages>(AllMessages);
         }
 
-        public void Delete()
+        public void Delete(int id)
         {
-            var toRemove = AllMessages.FirstOrDefault(m =>
-                m.Message == MessageText &&
-                m.Create == Create &&
-                m.IdUser == IdUser);
-
-            if (toRemove != null)
-                AllMessages.Remove(toRemove);
+            var msg = AllMessages.FirstOrDefault(m => m.Id == id);
+            if (msg != null)
+                AllMessages.Remove(msg);
         }
 
-        public void Save(bool Update = false)
+        public void Save(string messageText, DateTime create, int idUser)
         {
-            if (!Update)
-            {
-                int newId = AllMessages.Count == 0 ? 1 : AllMessages.Max(m => m.Id) + 1;
+            int newId = AllMessages.Count == 0 ? 1 : AllMessages.Max(m => m.Id) + 1;
+            AllMessages.Add(new Messages(messageText, create, idUser) { Id = newId });
+        }
 
-                var newMessage = new Messages
-                {
-                    Id = newId,
-                    Message = MessageText,
-                    Create = Create,
-                    IdUser = IdUser
-                };
-
-                AllMessages.Add(newMessage);
-            }
+        public List<Messages> GetMessagesByUser(int userId)
+        {
+            return AllMessages.Where(m => m.IdUser == userId).ToList();
         }
     }
 }

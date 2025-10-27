@@ -21,19 +21,24 @@ namespace Interface_Kazakov.Elements
     /// </summary>
     public partial class Messages : UserControl
     {
-        public MessagesContext ThisMessage;
-        public Messages(Classes.MessagesContext messages)
+        public Interface_Kazakov.Models.Messages ThisMessageModel;
+        public Messages(Interface_Kazakov.Models.Messages messageModel)
         {
             InitializeComponent();
-            ThisMessage = messages;
-            Message.Text = messages.Message;
-            Date.Text = messages.Create.ToString("dd.MM.yyyy");
+            ThisMessageModel = messageModel; 
+            Message.Text = messageModel.Message; 
+            Date.Text = messageModel.Create.ToString("dd.MM.yyyy"); 
         }
 
         private void DeleteMessage(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            ThisMessage.Delete();
-            MainWindow.mainWindow.parentMessage.Children.Remove(this);
+            var mainWin = MainWindow.mainWindow;
+            if (mainWin != null)
+            {
+                // Удаляем сообщение по Id
+                mainWin.messagesContext.Delete(ThisMessageModel.Id);
+                MainWindow.mainWindow.parentMessage.Children.Remove(this);
+            }
         }
     }
 }

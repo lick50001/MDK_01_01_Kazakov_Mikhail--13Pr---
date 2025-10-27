@@ -12,7 +12,7 @@ namespace Interface_Kazakov.Models
         public string Message { get; set; }
         public DateTime Create {  get; set; }
         public int IdUser { get; set; }
-         
+
         public Messages() { }
 
         public Messages(string messages, DateTime create, int idUser)
