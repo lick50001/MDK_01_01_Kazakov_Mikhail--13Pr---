@@ -7,12 +7,8 @@ using Interface_Kazakov.Models;
 
 namespace Interface_Kazakov.Interfaces
 {
-    public interface IMessages
+    public interface IUsers
     {
-        void All(out List<Messages> Messages);
-
-        void Save(bool Update = false);
-
-        void Delete();
+        void All(out List<Users> users);
     }
 }

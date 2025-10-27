@@ -11,15 +11,15 @@ namespace Interface_Kazakov.Models
         public int Id { get; set; }
         public string Message { get; set; }
         public DateTime Create {  get; set; }
-
         public int IdUser { get; set; }
+         
         public Messages() { }
 
-        public Messages(int Id, DateTime Create, int IdUser)
+        public Messages(string messages, DateTime create, int idUser)
         {
-            this.Id = Id;
-            this.Create = Create;
-            this.IdUser = IdUser;
+            Message = messages;
+            Create = create;
+            IdUser = idUser;
         }
     }
 }
