@@ -1,31 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
 using Interface_Kazakov.Interfaces;
 using Interface_Kazakov.Models;
 
 namespace Interface_Kazakov.Classes
 {
-    public class MessagesContext: Messages, IMessages
+    // Класс НЕ наследует Messages — он работает с ними
+    public class MessagesContext : IMessages
     {
-        public static List<Messages> AllMessages;
-        public MessagesContext() => AllMessages(out AllMessages);
+        // Статическое поле — инициализируем сразу, чтобы избежать null
+        public static List<Messages> AllMessages { get; } = new List<Messages>();
 
-        public MessagesContext(string Messages, DateTime Create, int IdUsers) { }
+        public string MessageText { get; set; }
+        public DateTime Create { get; set; }
+        public int IdUser { get; set; }
 
-        public void All(out List<Messages> Messages) =>
-            Messages = new List<Messages>();
+        public MessagesContext() { }
 
-        public void Deelte() =>
-            AllMessages.Remove(this);
-        
+        public MessagesContext(string messageText, DateTime create, int idUser)
+        {
+            MessageText = messageText;
+            Create = create;
+            IdUser = idUser;
+        }
+
+        public void All(out List<Messages> messages)
+        {
+            messages = new List<Messages>(AllMessages);
+        }
+
+        public void Delete()
+        {
+            var toRemove = AllMessages.FirstOrDefault(m =>
+                m.Message == MessageText &&
+                m.Create == Create &&
+                m.IdUser == IdUser);
+
+            if (toRemove != null)
+                AllMessages.Remove(toRemove);
+        }
+
         public void Save(bool Update = false)
         {
-            if (Update == false)
-                AllMessages.Add(this);
+            if (!Update)
+            {
+                int newId = AllMessages.Count == 0 ? 1 : AllMessages.Max(m => m.Id) + 1;
+
+                var newMessage = new Messages
+                {
+                    Id = newId,
+                    Message = MessageText,
+                    Create = Create,
+                    IdUser = IdUser
+                };
+
+                AllMessages.Add(newMessage);
+            }
         }
     }
 }
